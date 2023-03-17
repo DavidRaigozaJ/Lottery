@@ -1,0 +1,7 @@
+node_modules
+cache 
+artifacts
+cache
+deployments
+coverage
+coverage.json
