@@ -19,11 +19,11 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
         const transactionResponse = await vrfCoordinatorV2Mock.createSubscription()
         const transactionReceipt = await transactionResponse.wait()
         subscriptionId = await transactionReceipt.events[0].args.subId
-
         await vrfCoordinatorV2Mock.fundSubscription(subscriptionId, VRF_SUB_FUND_AMOUNT)
     } else {
         vrfCoordinatorV2Address = networkConfig[chainId]["vrfCoordinatorV2"]
         subscriptionId = networkConfig[chainId]["subscriptionId"]
+        
     }    
     
     log("-------------------------------------------------")
@@ -45,9 +45,16 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
         waitConfirmations: network.config.blockConfirmations || 1,
     })
 
+    // Raffle contract is a valid consumer
+
+    if(developmentChains.includes(network.name)) {
+        const vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock")
+        await vrfCoordinatorV2Mock.addConsumer(subscriptionId, raffle.address)
+    }
+
     if(!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
         log("Verifying")
-        await verify(raffle.address, args)
+        await verify(raffle.address, arguments)
     }
 
     log("Enter lottery wth command:")

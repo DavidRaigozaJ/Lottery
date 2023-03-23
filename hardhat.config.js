@@ -9,7 +9,7 @@ require("dotenv").config()
 
 const SEPOLIA_RPC_INFURA = process.env.SEPOLIA_RPC_INFURA || "https:eth-sepolia/example"
 const SEPOLIA_PRIVATE_KEY = process.env.SEPOLIA_PRIVATE_KEY || "0xKey"
-
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
 
 
 /** @type import('hardhat/config').HardhatUserConfig */
@@ -27,7 +27,17 @@ module.exports = {
       blockConfirmations: 6,
   },
 
-  },
+},
+
+gasReporter: {
+  enabled: false,
+  outputFile: "gas-report.txt",
+  noColors: true,
+  currency: "USD",
+  // coinmarketcap: COINMARKETCAP_API,
+  // token: "MATIC",
+},
+
   solidity: "0.8.7",
   namedAccounts: {
     deployer: {
@@ -37,5 +47,14 @@ module.exports = {
     player: {
       default: 1,
     },
+  },
+
+  etherscan: {
+    apiKey: {
+      sepolia: ETHERSCAN_API_KEY
+    }
+  },
+  mocha: {
+    timeout: 500000,
   },
 };

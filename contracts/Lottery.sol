@@ -46,16 +46,13 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
     address private s_recentWinner;
     address payable[] private s_players;
     RaffleState private s_raffleState;
-
-   
-   
-    
    
     /*events*/
     event RestedRaffleWinner(uint256 indexed requestId);
     event RaffleEnter(address indexed player);
     event WinnerPicked(address indexed winner);
     
+    /*Functions*/
     constructor(
         address vrfCoodinatorV2,
         uint64 subscriptionId,
@@ -141,7 +138,7 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         uint256 indexOfWinner = randomWords[0] % s_players.length;
         address payable recentWinner = s_players[indexOfWinner];
         s_recentWinner = recentWinner;
-           s_players = new address payable[](0);
+        s_players = new address payable[](0);
         s_raffleState = RaffleState.OPEN;
         s_lastTimeStamp = block.timestamp;
         (bool success, ) = recentWinner.call{value: address(this).balance}("");
@@ -154,7 +151,7 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
 
     /* View / Pure functions */
 
-  function getRaffleState() public view returns (RaffleState) {
+       function getRaffleState() public view returns (RaffleState) {
         return s_raffleState;
     }
 
@@ -162,7 +159,7 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         return NUM_WORDS;
     }
 
-       function getRequestConfrimations() public pure returns(uint256){
+       function getRequestConfirmations() public pure returns(uint256){
         return REQUEST_CONFIRMATIONS;
     }
 
@@ -174,7 +171,7 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         return s_players[index];
     }
 
-        function getLatestTimeStamp() public view returns(uint256){
+        function getLastTimeStamp() public view returns(uint256){
         return s_lastTimeStamp;
     }
 
@@ -182,13 +179,13 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
             return i_interval;
         }
 
-    function getEntranceFee() public view returns (uint256) {
-        return i_entranceFee;
-    }
+        function getEntranceFee() public view returns (uint256) {
+            return i_entranceFee;
+        }
 
 
-    function getNumberOfPlayers() public view returns(uint256){
-        return s_players.length;
-    }
+        function getNumberOfPlayers() public view returns(uint256){
+            return s_players.length;
+        }
  
 }
